@@ -1,12 +1,12 @@
 var express = require('express');
 var app = express();
-var ip   = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
+//var ip   = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var port = process.env.PORT || 3000;
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-app.use(express.static('index.html'));
+app.use(express.static(__dirname+'/public'));
 var socket = require('socket.io');
 
 io.sockets.on('connection', newConnection);
@@ -34,4 +34,4 @@ function newConnection(socket){
           io.emit('remove-user', {detail: deleting});        
         });	
 };
-http.listen(port,ip);
+http.listen(port);
