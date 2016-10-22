@@ -6,7 +6,7 @@ var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-app.use(express.static('public'));
+app.use(express.static('index.html'));
 var socket = require('socket.io');
 
 io.sockets.on('connection', newConnection);
