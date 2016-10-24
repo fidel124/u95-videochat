@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-//var ip   = process.env.IP || '127.0.0.1';
+var ip   = process.env.IP || '127.0.0.1';
 var port = process.env.PORT || 3000;
 
 var http = require('http').Server(app);
@@ -36,4 +36,4 @@ function newConnection(socket){
       io.emit('remove-user', {detail: deleting});             
     });	
 };
-http.listen(port); //(port,ip)
+http.listen(port,ip); //(port,ip)
