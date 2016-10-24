@@ -25,7 +25,8 @@ function newConnection(socket){
 	io.emit('friends', users);
 
 	socket.on('updateUser', function(data){
-		socket.broadcast.emit('updateAllUser', data);
+		socket.broadcast.emit('updateAllUser', {theIds:data.id, theCaps:data.capture});
+		//console.log(data);
 	});
 
 	socket.on('disconnect', function(){

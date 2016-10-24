@@ -43,14 +43,10 @@
 		});
 	});
 
-	socket.on('updateAllUser', function(data){		
-		var d1 = new Promise(function(resolve, reject){
-			resolve(data);
-		});
-		d1.then(function(data){
-			$('#'+data.id).attr('src',data.capture);
-		});				
-	});	
+	socket.on('updateAllUser', function(data1){
+		console.log(data1);
+		$('#'+data1.theIds).attr('src', data1.theCaps);
+	});
 
 	function setup(){
 		c = createCanvas(320,240);
