@@ -19,10 +19,10 @@
 </head>
 <html>
 <body>
-	<script>
+	<script type="text/javascript">
 	var c;
 	var video;
-	var socket = io.connect('https://'+document.domain+":"+location.port);
+	var socket = io.connect('http://'+document.domain+":"+location.port);
 	var id = null;
 
 	socket.on('myId', function(myId){
@@ -43,8 +43,7 @@
 		});
 	});
 
-	socket.on('updateAllUser', function(data){
-		console.log(data);
+	socket.on('updateAllUser', function(data){		
 		var d1 = new Promise(function(resolve, reject){
 			resolve(data);
 		});
