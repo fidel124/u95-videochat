@@ -10,8 +10,8 @@
 	<script src="js/socket.io.js"></script>
 	<style>
 	img{
-		width: 240px;
-		height: 160px;
+		width: 320px;
+		height: 240px;
 		margin: 5px;
 		border: 5px solid red;
 	}
@@ -22,7 +22,7 @@
 	<script>
 	var c;
 	var video;
-	var socket = io.connect('https://'+document.domain+":"+location.port);
+	var socket = io.connect('http://'+document.domain+":"+location.port);
 	var id = null;
 
 	socket.on('myId', function(myId){
@@ -43,20 +43,25 @@
 		});
 	});
 
-	socket.on('updateUser', function(data){
-		$('#'+data.id).attr('src', data.capture);
-	});
-	
+	socket.on('updateAllUser', function(data){
+		console.log(data);
+		var d1 = new Promise(function(resolve, reject){
+			resolve(data);
+		});
+		d1.then(function(data){
+			$('#'+data.id).attr('src',data.capture);
+		});				
+	});	
 
 	function setup(){
-		c = createCanvas(240,160);
+		c = createCanvas(320,240);
 		video = createCapture(VIDEO);
-		video.size(240,160);
+		video.size(320,240);
 		video.hide();
 	}
 
 	function draw(){
-		image(video, 0, 0, 240, 160);
+		image(video, 0, 0, 320, 240);
 
 		if(frameRate() > 55 && id != null){
 			socket.emit('updateUser', {id:id, capture:c.canvas.toDataURL()});
