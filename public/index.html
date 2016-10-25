@@ -12,9 +12,10 @@
 	img{
 		width: 320px;
 		height: 240px;
-		margin: 5px;
-		border: 5px solid gray;
-	}
+		margin-right: 5px;
+		margin-left: 5px;
+		border: 2px solid gray;
+	}	
 	</style>
 </head>
 <html>
@@ -23,45 +24,49 @@
 	var c;
 	var video;
 	var socket = io.connect('https://'+document.domain+":"+location.port);
-	var id = null;
-
+	var personalId = null;
+	
 	socket.on('myId', function(myId){
-		id = myId;
-		console.log(id);
+		personalId = myId;		
 	});
 
-	socket.on('remove-user', function(data){		
+	socket.on('remove-user', function(data){			
       $('#'+data.detail).remove();
     });
 
-	socket.on('friends', function(users){  
+	socket.on('connectIds', function(allIds){		
 		$('img').remove();
-		$.each(users, function(index, val){
-			if(val != id){				
-				$('body').append('<img id='+val+'>');
-			}
+		$.each(allIds, function(index, value){
+			if(value != personalId){				
+				$('body').append('<img id='+value+'>');
+			}			
 		});
 	});
 
-	socket.on('updateAllUser', function(data1){
-		console.log(data1);
-		$('#'+data1.theIds).attr('src', data1.theCaps);
-	});
-
-	function setup(){
-		c = createCanvas(320,240);
-		video = createCapture(VIDEO);
+	socket.on('updateAllUser', function(data){
+		$('#'+data.theIds).attr('src', data.theCaps);		
+		/* var b= new Promise(function(resolve,reject){
+			resolve(data);
+		});
+		b.then(function(result){
+			$('#'+result.theIds).attr('src', result.theCaps);
+		});		*/	
+	});	
+	
+	function setup(){						
+		c = createCanvas(320,240);				
+		video = createCapture(VIDEO);		
 		video.size(320,240);
 		video.hide();
 	}
 
 	function draw(){
 		image(video, 0, 0, 320, 240);
-
-		if(frameRate() > 55 && id != null){
-			socket.emit('updateUser', {id:id, capture:c.canvas.toDataURL()});
+		if(frameRate() > 55 && personalId != null){
+			socket.emit('updateUser', {streamId:personalId, capture:c.canvas.toDataURL()});
 		}
 	}
 	</script>
+	
 </body>	
 </html>

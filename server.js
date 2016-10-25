@@ -11,30 +11,24 @@ var socket = require('socket.io');
 
 io.sockets.on('connection', newConnection);
 
-	
-var users = [];
-var userIds = [];
+var allIds = [];
+function newConnection(socket){  	
 
-function newConnection(socket){
   	console.log('new connection: ' + socket.id);
+  	socket.emit('myId', socket.id);  	
+  	allIds.push(socket.id);  	
+	io.emit('connectIds', allIds);// first
 
-	socket.emit('myId', users.length);
-	userIds[users.length] = socket.id;
-
-	users.push(users.length);	
-	io.emit('friends', users);
 
 	socket.on('updateUser', function(data){
-		socket.broadcast.emit('updateAllUser', {theIds:data.id, theCaps:data.capture});
-		//console.log(data);
+		socket.broadcast.emit('updateAllUser', {theIds:data.streamId, theCaps:data.capture});		
 	});
 
 	socket.on('disconnect', function(){
-	  var deleting = userIds.indexOf(socket.id);        
-      userIds.splice(deleting,1);
-      users.splice(deleting,1);
-      console.log(socket.id +' deleted');
-      io.emit('remove-user', {detail: deleting});             
+	  var deleting = allIds.indexOf(socket.id);        
+      allIds.splice(deleting,1);      
+      console.log(socket.id +' deleted');      
+      io.emit('remove-user', {detail: socket.id});             
     });	
 };
 http.listen(port); //(port,ip)
