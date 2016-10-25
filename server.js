@@ -14,15 +14,13 @@ io.sockets.on('connection', newConnection);
 var allIds = [];
 function newConnection(socket){  	
 
-  	console.log('new connection: ' + socket.id);
+  	//console.log('new connection: ' + socket.id);
   	socket.emit('myId', socket.id);  	
   	allIds.push(socket.id);  	
 	  io.emit('connectIds', allIds);// first
 
 
 	socket.on('updateUser', function(data){    
-    //var blobArray = [];    
-    //blobArray.push(data);
     //io.sockets.emit('updateAllUser', data);    
 		socket.broadcast.emit('updateAllUser', data);		
 	});
@@ -30,7 +28,7 @@ function newConnection(socket){
 	socket.on('disconnect', function(){
 	  var deleting = allIds.indexOf(socket.id);        
       allIds.splice(deleting,1);      
-      console.log(socket.id +' deleted');      
+      //console.log(socket.id +' deleted');      
       io.emit('remove-user', {detail: socket.id});             
     });	
 };
