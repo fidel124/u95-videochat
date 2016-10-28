@@ -10,8 +10,8 @@
 	<script src="js/socket.io.js"></script>
 	<style>
 	img{
-		width: 320px;
-		height: 240px;
+		width: 120px;
+		height: 70px;
 		margin-right: 5px;
 		margin-left: 5px;
 		border: 2px solid gray;
@@ -21,8 +21,8 @@
 <html>
 <body>
 	<script type="text/javascript">
-	var c;
-	var video;
+	var capture;
+	var video2;
 	var socket = io.connect('https://'+document.domain+":"+location.port);
 	var personalId = null;
 	var containsAllids = [];
@@ -47,31 +47,44 @@
 	});
 
 	socket.on('updateAllUser', function(data){			
-		var blob;
+		
 		for(var i=0; i<containsAllids.length; i++){
-			if(data.streamId == containsAllids[i]){
+			if(containsAllids[i] == data.streamId){
 				$('#'+data.streamId).attr('src', data.capture);	
 			}
-		}
-		//$('#'+data.theIds).attr('src', data.theCaps);		
-		/* var b= new Promise(function(resolve,reject){
-			resolve(data);
+		} 
+		/*
+		for(var i=0; i<containsAllids.length; i++){
+			//var blob[i]
+			if(containsAllids[i] == data.streamId){
+				blob[i] = new Promise(function(resolve,reject){
+					resolve(data);
+				}); 
+			}
+			blob[i].then(function(result){
+			$('#'+result.streamId).attr('src', result.capture);
 		});
-		b.then(function(result){
-			$('#'+result.theIds).attr('src', result.theCaps);
-		});		*/	
+		}*/		
 	});	
 	
-	function setup(){						
-		c = createCanvas(320,240);				
-		video = createCapture(VIDEO);		
-		video.size(320,240);
-		video.hide();
+	function setup(){
+	//capture = 						
+		video2 = createCanvas(120,70);
+		var constraints = {
+	    	audio: true,
+    		video: {
+      			facingMode: "user"      			
+    		},
+    		width: 120,
+        	height: 70    		
+  		};
+  		capture = createCapture(constraints)
+  		capture.hide();
 	}
 	function draw(){
-		image(video, 0, 0, 320, 240);
-		if(frameRate() > 55 && personalId != null){
-			socket.emit('updateUser', {streamId:personalId, capture:c.canvas.toDataURL()});
+		image(capture, 0, 0, 120, 70);
+		if(frameRate() > 60 && personalId != null && containsAllids.length > 0){
+			socket.emit('updateUser', {streamId:personalId, capture:video2.canvas.toDataURL()});
 		}
 	}
 	</script>	
