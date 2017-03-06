@@ -4,89 +4,119 @@
 	<meta charset="UTF-8">
 	<title></title>
 	<script src="js/jquery2.0.0.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<script src="js/bootstrap.min.js"></script>	
 	<script src="js/p5.js"></script>
 	<script src="js/p5.dom.js"></script>
 	<script src="js/p5.sound.js"></script>	
 	<script src="js/socket.io.js"></script>
 	<style>
+	body {
+ 	 padding-top: 80px;
+ 	 margin-left:10px;
+ 	 margin-right:10px;
+	}
+	.trademark{
+    color:white;
+    padding:15px;
+    }
 	img{
-		width: 120px;
-		height: 70px;
+		width: 320px;
+		height: 240px;
 		margin-right: 5px;
 		margin-left: 5px;
+		margin-left: 10px;
 		border: 2px solid gray;
 	}	
 	</style>
 </head>
 <html>
 <body>
-	<script type="text/javascript">
-	var capture;
-	var video2;
-	var socket = io.connect('https://'+document.domain+":"+location.port);
-	var personalId = null;
-	var containsAllids = [];
-	
-	socket.on('myId', function(myId){
-		personalId = myId;				
-	});
-
-	socket.on('remove-user', function(data){					
-      $('#'+data.detail).remove();
-      containsAllids.splice(containsAllids.indexOf(data.detail),1);
-    });
-
-	socket.on('connectIds', function(allIds){		
-		containsAllids = allIds;		
-		$('img').remove();
-		$.each(allIds, function(index, value){
-			if(value != personalId){				
-				$('body').append('<img id='+value+'>');
-			}			
-		});		
-	});
-
-	socket.on('updateAllUser', function(data){			
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			 </button>
+			 <a class="navbar-brand" href="#">WebRTC</a>
+		 <span class="nav navbar-nav navbar-right  trademark">By: Fidelis Ololube</span>             
+		</div>
+		<div id="navbar" class="collapse navbar-collapse">         
+		</div><!--/.nav-collapse -->
+	</div>
+</nav>
+	<div class="container">
+		<script type="text/javascript">
+		var capture;
+		var video2;
+		var socket = io.connect('https://'+document.domain+":"+location.port);
+		var personalId = null;
+		var containsAllids = [];
 		
-		for(var i=0; i<containsAllids.length; i++){
-			if(containsAllids[i] == data.streamId){
-				$('#'+data.streamId).attr('src', data.capture);	
-			}
-		} 
-		/*
-		for(var i=0; i<containsAllids.length; i++){
-			//var blob[i]
-			if(containsAllids[i] == data.streamId){
-				blob[i] = new Promise(function(resolve,reject){
-					resolve(data);
-				}); 
-			}
-			blob[i].then(function(result){
-			$('#'+result.streamId).attr('src', result.capture);
+		socket.on('myId', function(myId){
+			personalId = myId;				
 		});
-		}*/		
-	});	
-	
-	function setup(){
-	//capture = 						
-		video2 = createCanvas(120,70);
-		var constraints = {
-	    	audio: false,
-    		video: {
-      			facingMode: "user"      			
-    		},
-    		width: 120,
-        	height: 70    		
-  		};
-  		capture = createCapture(constraints)
-  		capture.hide();
-	}
-	function draw(){
-		image(capture, 0, 0, 120, 70);
-		if(frameRate() > 60 && personalId != null && containsAllids.length > 0){
-			socket.emit('updateUser', {streamId:personalId, capture:video2.canvas.toDataURL()});
+
+		socket.on('remove-user', function(data){					
+	      $('#'+data.detail).remove();
+	      containsAllids.splice(containsAllids.indexOf(data.detail),1);
+	    });
+
+		socket.on('connectIds', function(allIds){		
+			containsAllids = allIds;		
+			$('img').remove();
+			$.each(allIds, function(index, value){
+				if(value != personalId){				
+					$('body').append('<img id='+value+'>');
+				}			
+			});		
+		});
+
+		socket.on('updateAllUser', function(data){			
+			
+			for(var i=0; i<containsAllids.length; i++){
+				if(containsAllids[i] == data.streamId){
+					$('#'+data.streamId).attr('src', data.capture);	
+				}
+			} 
+			/*
+			for(var i=0; i<containsAllids.length; i++){
+				//var blob[i]
+				if(containsAllids[i] == data.streamId){
+					blob[i] = new Promise(function(resolve,reject){
+						resolve(data);
+					}); 
+				}
+				blob[i].then(function(result){
+				$('#'+result.streamId).attr('src', result.capture);
+			});
+			}*/		
+		});	
+		
+		function setup(){
+		//capture = 						
+			video2 = createCanvas(320,240);
+			var constraints = {
+		    	audio: false,
+	    		video: {
+	      			facingMode: "user"      			
+	    		},
+	    		width: 320,
+	        	height: 240    		
+	  		};
+	  		capture = createCapture(constraints)
+	  		capture.hide();
 		}
-	}
-	</script>	
+		function draw(){
+			image(capture, 0, 0, 320, 240);
+			if(frameRate() > 60 && personalId != null && containsAllids.length > 0){
+				socket.emit('updateUser', {streamId:personalId, capture:video2.canvas.toDataURL()});
+			}
+		}
+		</script>
+	</div>	
 </body>	
 </html>
