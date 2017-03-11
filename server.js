@@ -28,9 +28,11 @@ function newConnection(socket){
              //socket.broadcast.emit('updateAllUser', dataArray[i]);
       //io.sockets.emit('updateAllUser', dataArray[i]);
       //dataArray = [];
-      if(data){
-        io.sockets.emit('updateAllUser', data);
-      }
+      //if(data){
+        setInterval(function(){
+         io.sockets.emit('updateAllUser', data); 
+       }, 500);        
+      //}
     //}    		
 	}); 
 /*
