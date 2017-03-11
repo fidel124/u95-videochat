@@ -1,4 +1,5 @@
 var express = require('express');
+var fs = require('fs');
 var app = express();
 //var ip   = process.env.IP || '127.0.0.1';
 var port = process.env.PORT || 3000;
@@ -19,18 +20,20 @@ function newConnection(socket){
   	allIds.push(socket.id);  	
 	  io.emit('connectIds', allIds);// first
 
-
+      /*
 	socket.on('updateUser', function(data){ 
-  var dataArray = [];
-  dataArray.push(data);
-  for(var i = 0; i< dataArray.length; i++){ 
-    //socket.broadcast.emit('updateAllUser', dataArray[i]);
-    io.sockets.emit('updateAllUser', dataArray[i]);
-  }   
-    //io.sockets.emit('updateAllUser', data);    
-		//socket.broadcast.emit('updateAllUser', data);		
-	});
-
+    var dataArray = [];
+    dataArray.push(data);
+    for(var i = 0; i< dataArray.length; i++){ 
+      //socket.broadcast.emit('updateAllUser', dataArray[i]);
+      io.sockets.emit('updateAllUser', dataArray[i]);
+    }    		
+	}); */
+  socket.on('updateUser', function(data){
+    var myReadStream = fs.createReadStream(data);
+    io.sockets.emit('updateAllUser', myReadStream.pipe(data));
+  });
+   
 	socket.on('disconnect', function(){
 	  var deleting = allIds.indexOf(socket.id);        
       allIds.splice(deleting,1);      
