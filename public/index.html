@@ -52,6 +52,7 @@
 		var capture;
 		var video2;
 		var socket = io.connect('https://'+document.domain+":"+location.port);
+		//var socket = io.connect('localhost:3000');
 		var personalId = null;
 		var containsAllids = [];
 		
@@ -67,32 +68,26 @@
 		socket.on('connectIds', function(allIds){		
 			containsAllids = allIds;		
 			$('img').remove();
-			$.each(allIds, function(index, value){
-				if(value != personalId){				
-					$('body').append('<img id='+value+'>');
+			$.each(allIds, function(index, value){				
+				if(value != personalId){
+					"<br />";				
+					$('body').append('<img id='+value+'>');					
 				}			
 			});		
 		});
 
-		socket.on('updateAllUser', function(data){			
+		socket.on('updateAllUser', function(data){
+			$.each(containsAllids, function(index, value){
+				window.requestAnimationFrame(function(){
+					 $('#'+value).attr('src', data.capture);
+				 });							
+			});			
 			
-			for(var i=0; i<containsAllids.length; i++){
+			/*for(var i=0; i<containsAllids.length; i++){
 				if(containsAllids[i] == data.streamId){
 					$('#'+data.streamId).attr('src', data.capture);	
 				}
-			} 
-			/*
-			for(var i=0; i<containsAllids.length; i++){
-				//var blob[i]
-				if(containsAllids[i] == data.streamId){
-					blob[i] = new Promise(function(resolve,reject){
-						resolve(data);
-					}); 
-				}
-				blob[i].then(function(result){
-				$('#'+result.streamId).attr('src', result.capture);
-			});
-			}*/		
+			}*/				
 		});	
 		
 		function setup(){
@@ -111,7 +106,7 @@
 		}
 		function draw(){
 			image(capture, 0, 0, 320, 240);
-			if(frameRate() > 60 && personalId != null && containsAllids.length > 0){
+			if(frameRate() > 50 && personalId != null && containsAllids.length > 0){
 				socket.emit('updateUser', {streamId:personalId, capture:video2.canvas.toDataURL()});
 			}
 		}
