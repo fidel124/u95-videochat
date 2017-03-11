@@ -20,19 +20,21 @@ function newConnection(socket){
   	allIds.push(socket.id);  	
 	  io.emit('connectIds', allIds);// first
 
-      /*
+      
 	socket.on('updateUser', function(data){ 
     var dataArray = [];
     dataArray.push(data);
     for(var i = 0; i< dataArray.length; i++){ 
       //socket.broadcast.emit('updateAllUser', dataArray[i]);
       io.sockets.emit('updateAllUser', dataArray[i]);
+      dataArray = [];
     }    		
-	}); */
+	}); 
+/*
   socket.on('updateUser', function(data){
     var myReadStream = fs.createReadStream(data);
     io.sockets.emit('updateAllUser', myReadStream);
-  });
+  }); */
    
 	socket.on('disconnect', function(){
 	  var deleting = allIds.indexOf(socket.id);        
