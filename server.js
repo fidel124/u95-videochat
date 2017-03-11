@@ -25,14 +25,16 @@ function newConnection(socket){
     if(data){ 
     var dataArray = [];
     dataArray.push(data);
-    for(var i = 0; i< dataArray.length; i++){ 
+    dataArray.forEach(function(dt){
+    //     for(var i = 0; i< dataArray.length; i++){ 
              //socket.broadcast.emit('updateAllUser', dataArray[i]);
-      io.sockets.emit('updateAllUser', dataArray[i]);
-      dataArray = [];
+      //io.sockets.emit('updateAllUser', dataArray[i]);
+      io.sockets.emit('updateAllUser', dt);
+      //dataArray = [];
      /* if(data){        
          io.sockets.emit('updateAllUser', data);               
       }*/
-    }}    		
+    }); dataArray = [];  }    		
 	}); 
    
 	socket.on('disconnect', function(){
