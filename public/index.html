@@ -77,17 +77,19 @@
 		});
 
 		socket.on('updateAllUser', function(data){
-			if(data){
+			//if(data){
 				$.each(containsAllids, function(index, value){
 					window.requestAnimationFrame(function(){
 						 $('#'+value).attr('src', data.capture);
 					 });							
 				});			
-			}
+			//}
 			/*for(var i=0; i<containsAllids.length; i++){
-				if(containsAllids[i] == data.streamId){
-					$('#'+data.streamId).attr('src', data.capture);	
-				}
+				//if(containsAllids[i] == data.streamId){
+					window.requestAnimationFrame(function(){
+						 $('#'+containsAllids[i]).attr('src', data.capture);
+					 });	
+				//}
 			}*/				
 		});	
 		
