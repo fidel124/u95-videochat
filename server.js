@@ -28,18 +28,11 @@ function newConnection(socket){
              //socket.broadcast.emit('updateAllUser', dataArray[i]);
       //io.sockets.emit('updateAllUser', dataArray[i]);
       //dataArray = [];
-      //if(data){
-        setInterval(function(data){
-         io.sockets.emit('updateAllUser', data); 
-       }, 500);        
-      //}
+      if(data){        
+         io.sockets.emit('updateAllUser', data);               
+      }
     //}    		
 	}); 
-/*
-  socket.on('updateUser', function(data){
-    var myReadStream = fs.createReadStream(data);
-    io.sockets.emit('updateAllUser', myReadStream);
-  }); */
    
 	socket.on('disconnect', function(){
 	  var deleting = allIds.indexOf(socket.id);        
