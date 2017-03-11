@@ -15,26 +15,17 @@ io.sockets.on('connection', newConnection);
 var allIds = [];
 function newConnection(socket){  	
 
-  	//console.log('new connection: ' + socket.id);
-  	socket.emit('myId', socket.id);  	
-  	allIds.push(socket.id);  	
-	  io.emit('connectIds', allIds);// first
+  //console.log('new connection: ' + socket.id);
+  socket.emit('myId', socket.id);  	
+  allIds.push(socket.id);  	
+	io.emit('connectIds', allIds);// first
 
       
 	socket.on('updateUser', function(data){
-    if(data){ 
-    var dataArray = [];
-    dataArray.push(data);
-    dataArray.forEach(function(dt){
-    //     for(var i = 0; i< dataArray.length; i++){ 
-             //socket.broadcast.emit('updateAllUser', dataArray[i]);
-      //io.sockets.emit('updateAllUser', dataArray[i]);
-      io.sockets.emit('updateAllUser', dt);
-      //dataArray = [];
-     /* if(data){        
-         io.sockets.emit('updateAllUser', data);               
-      }*/
-    }); dataArray = [];  }    		
+    if(data){     
+      //socket.broadcast.emit('updateAllUser', dataArray[i]); 
+      io.sockets.emit('updateAllUser', data);   
+    }    		
 	}); 
    
 	socket.on('disconnect', function(){
