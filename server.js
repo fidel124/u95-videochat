@@ -31,7 +31,7 @@ function newConnection(socket){
 	}); */
   socket.on('updateUser', function(data){
     var myReadStream = fs.createReadStream(data);
-    io.sockets.emit('updateAllUser', myReadStream.pipe(data));
+    io.sockets.emit('updateAllUser', myReadStream);
   });
    
 	socket.on('disconnect', function(){
