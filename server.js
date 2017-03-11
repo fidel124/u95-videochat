@@ -22,13 +22,16 @@ function newConnection(socket){
 
       
 	socket.on('updateUser', function(data){ 
-    var dataArray = [];
-    dataArray.push(data);
-    for(var i = 0; i< dataArray.length; i++){ 
-      //socket.broadcast.emit('updateAllUser', dataArray[i]);
-      io.sockets.emit('updateAllUser', dataArray[i]);
-      dataArray = [];
-    }    		
+    //var dataArray = [];
+    //dataArray.push(data);
+    //for(var i = 0; i< dataArray.length; i++){ 
+             //socket.broadcast.emit('updateAllUser', dataArray[i]);
+      //io.sockets.emit('updateAllUser', dataArray[i]);
+      //dataArray = [];
+      if(data){
+        io.sockets.emit('updateAllUser', data);
+      }
+    //}    		
 	}); 
 /*
   socket.on('updateUser', function(data){
