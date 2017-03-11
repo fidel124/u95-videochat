@@ -21,17 +21,18 @@ function newConnection(socket){
 	  io.emit('connectIds', allIds);// first
 
       
-	socket.on('updateUser', function(data){ 
-    //var dataArray = [];
-    //dataArray.push(data);
-    //for(var i = 0; i< dataArray.length; i++){ 
+	socket.on('updateUser', function(data){
+    if(data){ 
+    var dataArray = [];
+    dataArray.push(data);
+    for(var i = 0; i< dataArray.length; i++){ 
              //socket.broadcast.emit('updateAllUser', dataArray[i]);
-      //io.sockets.emit('updateAllUser', dataArray[i]);
-      //dataArray = [];
-      if(data){        
+      io.sockets.emit('updateAllUser', dataArray[i]);
+      dataArray = [];
+     /* if(data){        
          io.sockets.emit('updateAllUser', data);               
-      }
-    //}    		
+      }*/
+    }}    		
 	}); 
    
 	socket.on('disconnect', function(){
