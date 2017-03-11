@@ -23,8 +23,8 @@ function newConnection(socket){
       
 	socket.on('updateUser', function(data){
     if(data){     
-      //socket.broadcast.emit('updateAllUser', dataArray[i]); 
-      io.sockets.emit('updateAllUser', data);   
+      socket.broadcast.emit('updateAllUser', data); 
+      //io.sockets.emit('updateAllUser', data);   
     }    		
 	}); 
    
