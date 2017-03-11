@@ -29,7 +29,7 @@ function newConnection(socket){
       //io.sockets.emit('updateAllUser', dataArray[i]);
       //dataArray = [];
       //if(data){
-        setInterval(function(){
+        setInterval(function(data){
          io.sockets.emit('updateAllUser', data); 
        }, 500);        
       //}
