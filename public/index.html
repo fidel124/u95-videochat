@@ -51,8 +51,8 @@
 		<script type="text/javascript">
 		var capture;
 		var video2;
-		var socket = io.connect('https://'+document.domain+":"+location.port);
-		//var socket = io.connect('localhost:3000');
+		//var socket = io.connect('https://'+document.domain+":"+location.port);
+		var socket = io.connect('localhost:3000');
 		var personalId = null;
 		var containsAllids = [];
 		
@@ -78,19 +78,19 @@
 
 		socket.on('updateAllUser', function(data){
 			
-				/*$.each(containsAllids, function(index, value){
+				$.each(containsAllids, function(index, value){
 					window.requestAnimationFrame(function(){
 						 $('#'+value).attr('src', data.capture);
 					 });							
-				});	*/		
-			
+				});			
+			/*
 			for(var i=0; i<containsAllids.length; i++){
 				if(containsAllids[i] === data.streamId){				
 					window.requestAnimationFrame(function(){
 						 $('#'+data.streamId).attr('src', data.capture);
 					});				
 			    }
-			}				
+			} */				
 		});	
 		
 		function setup(){
@@ -109,7 +109,7 @@
 		}
 		function draw(){
 			image(capture, 0, 0, 320, 240);
-			if(frameRate() > 50 && personalId != null && containsAllids.length > 0){
+			if(frameRate() > 59 && personalId != null && containsAllids.length > 0){
 				socket.emit('updateUser', {streamId:personalId, capture:video2.canvas.toDataURL()});
 			}
 		}
