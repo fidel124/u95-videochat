@@ -69,28 +69,28 @@
 			containsAllids = allIds;		
 			$('img').remove();
 			$.each(allIds, function(index, value){				
-				if(value != personalId){
-					"<br />";				
-					$('body').append('<img id='+value+'>');					
+				if(value != personalId){									
+					$('body').append('<img id='+value+'>');
+					"<br />";					
 				}			
 			});		
 		});
 
 		socket.on('updateAllUser', function(data){
-			//if(data){
-				$.each(containsAllids, function(index, value){
+			
+				/*$.each(containsAllids, function(index, value){
 					window.requestAnimationFrame(function(){
 						 $('#'+value).attr('src', data.capture);
 					 });							
-				});			
-			//}
-			/*for(var i=0; i<containsAllids.length; i++){
-				//if(containsAllids[i] == data.streamId){
+				});	*/		
+			
+			for(var i=0; i<containsAllids.length; i++){
+				if(containsAllids[i] === data.streamId){				
 					window.requestAnimationFrame(function(){
-						 $('#'+containsAllids[i]).attr('src', data.capture);
-					 });	
-				//}
-			}*/				
+						 $('#'+data.streamId).attr('src', data.capture);
+					});				
+			    }
+			}				
 		});	
 		
 		function setup(){
@@ -109,7 +109,7 @@
 		}
 		function draw(){
 			image(capture, 0, 0, 320, 240);
-			if(frameRate() > 50 && personalId != null && containsAllids.length > 0){
+			if(frameRate() > 30 && personalId != null && containsAllids.length > 0){
 				socket.emit('updateUser', {streamId:personalId, capture:video2.canvas.toDataURL()});
 			}
 		}
