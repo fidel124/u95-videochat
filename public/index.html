@@ -48,54 +48,45 @@
 	</div>
 </nav>
 	<div class="container">
-	Still under development!
+	Still under development! <span id ="count"></span><br />
 		<script type="text/javascript">
 		var capture;
 		var video2;
-		var socket = io.connect('https://'+document.domain+":"+location.port);
-		//var socket = io.connect('localhost:3000');
+		//var socket = io.connect('https://'+document.domain+":"+location.port);
+		var socket = io.connect('localhost:3000',{forceNew: true});
 		var personalId = null;
 		var containsAllids = [];
 		
 		socket.on('myId', function(myId){
-			personalId = myId;				
+			personalId = myId;	// the user's id		
 		});
 
-		socket.on('remove-user', function(data){					
+		socket.on('remove-user', function(data){ //when disconnected	
 	      $('#'+data.detail).remove();
 	      containsAllids.splice(containsAllids.indexOf(data.detail),1);
 	    });
 
 		socket.on('connectIds', function(allIds){		
-			containsAllids = allIds;		
+			containsAllids = allIds;   // all conneted ids			
 			$('img').remove();
 			$.each(allIds, function(index, value){				
-				if(value != personalId){									
-					$('body').append('<img id='+value+'>');
-					"<br />";					
+				if(value != personalId){								
+					$('body').append('<img id='+value+'>');				
 				}			
 			});		
 		});
 
-		socket.on('updateAllUser', function(data){
-			
-				$.each(containsAllids, function(index, value){
-					//window.requestAnimationFrame(function(){
-						 $('#'+value).attr('src', data.capture);
-					 //});							
-				});			
-			/*
-			for(var i=0; i<containsAllids.length; i++){
-				if(containsAllids[i] === data.streamId){				
-					window.requestAnimationFrame(function(){
-						 $('#'+data.streamId).attr('src', data.capture);
-					});				
-			    }
-			} */				
-		});	
+		socket.on('updateAllUser', function(data){			
+			if(data){
+				$.each(containsAllids, function(index, value){				
+					if(value != personalId){							
+						$('#'+value).attr('src', data.capture);		
+					}			
+				});				
+			}							
+		});		
 		
-		function setup(){
-		//capture = 						
+		function setup(){								
 			video2 = createCanvas(320,240);
 			var constraints = {
 		    	audio: false,
@@ -106,16 +97,36 @@
 	        	height: 240    		
 	  		};
 	  		capture = createCapture(constraints)
-	  		capture.hide();
+	  		capture.hide();	  		
 		}
+
 		function draw(){
 			image(capture, 0, 0, 320, 240);
+			
 			if(frameRate() > 59 && personalId != null && containsAllids.length > 0){
 				socket.emit('updateUser', {streamId:personalId, capture:video2.canvas.toDataURL()});
 			}
+
+			
+			/*
+			if(containsAllids.length > 1){
+				$.each(containsAllids, function(index, value){
+					socket.on(''+value+'', function(data){					
+						$('#'+value).attr('src', data.fdt);						
+					});
+				});
+			}
+			
+			if(containsAllids.length > 0){
+				for(var i=0; i<containsAllids.length; i++){				
+					socket.on(''+containsAllids[i]+'', function(data){				
+						$('#'+containsAllids[i]).attr('src', data.fdt);
+					});				
+				}
+			}*/			
 		}
 		</script>
 	</div>
-
+  <div id="textArea"></div>
 </body>	
 </html>
