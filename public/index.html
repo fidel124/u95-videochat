@@ -79,7 +79,7 @@
 		socket.on('updateAllUser', function(data){			
 			if(data){
 				$.each(containsAllids, function(index, value){				
-					if(value != personalId){							
+					if(value == data.streamId){							
 						$('#'+value).attr('src', data.capture);		
 					}			
 				});				
